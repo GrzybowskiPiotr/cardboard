@@ -25,12 +25,13 @@ export const CardContentForm = (props: CardContentFormProps) => {
   }
   const [fontSize, setFontSize] = useState(16)
   const fS = { fontSize: `${fontSize}px` }
+
   useEffect(() => {
-    if (
-      textArea.current &&
-      textArea.current.scrollHeight - textArea.current.clientHeight > 0
-    ) {
-      setFontSize(fontSize - 2)
+    if (textArea.current) {
+      const { scrollHeight, clientHeight } = textArea.current
+      if (scrollHeight > clientHeight) {
+        setFontSize((prevSize) => Math.max(prevSize - 2, 10))
+      }
     }
   }, [value, fontSize])
   return (
