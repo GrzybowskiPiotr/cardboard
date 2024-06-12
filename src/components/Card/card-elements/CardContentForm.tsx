@@ -11,7 +11,7 @@ interface CardContentFormProps {
 }
 
 export const CardContentForm = (props: CardContentFormProps) => {
-  const textArea = useRef()
+  const textArea = useRef<HTMLTextAreaElement>(null)
   const { value, handleChange } = useInput(props.initialValues.content)
 
   const handleSubmit = (event: React.FormEvent) => {
