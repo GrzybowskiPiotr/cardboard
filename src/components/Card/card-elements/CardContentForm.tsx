@@ -2,6 +2,7 @@ import { useInput } from '../../../hooks/useInput'
 
 import { CardModelData } from '../../../data'
 import styles from './CardContentForm.module.css'
+import { useEffect, useRef, useState } from 'react'
 
 interface CardContentFormProps {
   initialValues: CardModelData
@@ -10,6 +11,7 @@ interface CardContentFormProps {
 }
 
 export const CardContentForm = (props: CardContentFormProps) => {
+  const textArea = useRef()
   const { value, handleChange } = useInput(props.initialValues.content)
 
   const handleSubmit = (event: React.FormEvent) => {
@@ -22,10 +24,21 @@ export const CardContentForm = (props: CardContentFormProps) => {
       props.onDeleteCard && props.onDeleteCard(props.initialValues.id)
     }
   }
-
+  const [fontSize, setFontSize] = useState(16)
+  const fS = { fontSize: `${fontSize}px` }
+  useEffect(() => {
+    if (
+      textArea.current &&
+      textArea.current.scrollHeight - textArea.current.clientHeight > 0
+    ) {
+      setFontSize(fontSize - 2)
+    }
+  }, [value, fontSize])
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
       <textarea
+        ref={textArea}
+        style={fS}
         className={styles.textarea}
         autoFocus
         placeholder={'Start typing or press Backspace to delete this card'}
