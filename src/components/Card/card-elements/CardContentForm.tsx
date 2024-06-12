@@ -1,5 +1,4 @@
 import { useInput } from '../../../hooks/useInput'
-
 import { CardModelData } from '../../../data'
 import styles from './CardContentForm.module.css'
 import { useEffect, useRef, useState } from 'react'
