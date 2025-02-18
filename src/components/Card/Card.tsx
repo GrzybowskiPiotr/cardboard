@@ -34,7 +34,7 @@ export const Card = (props: CardProps) => {
     handleSetEditingOff()
   }
 
-  const { content, createdAt } = props
+  const { content } = props
   const [fontSize, setFontSize] = useState(16)
 
   useEffect(() => {
@@ -44,9 +44,7 @@ export const Card = (props: CardProps) => {
 
     const offsetContent = paragraph.clientHeight
     const createdAtHeight = createdAt.clientHeight
-
     const containerHeight = container.clientHeight - fontSize
-
     if (offsetContent + createdAtHeight > containerHeight) {
       setFontSize((prevSize) => prevSize - 2)
     }
