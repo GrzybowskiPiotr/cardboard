@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { CardContentForm } from './card-elements/CardContentForm'
 
@@ -16,7 +16,9 @@ interface CardProps extends CardModelData {
 export const Card = (props: CardProps) => {
   const ref = useRef(null)
   const [isEditing, setEditing] = useState(false)
-
+  const paragraphRef = useRef<HTMLParagraphElement>(null)
+  const CardConainerDivRef = useRef<HTMLDivElement>(null)
+  const CreatedAtParagraphRef = useRef<HTMLParagraphElement>(null)
   const handleSetEditingOff = () => {
     setEditing(false)
   }
@@ -32,17 +34,39 @@ export const Card = (props: CardProps) => {
     handleSetEditingOff()
   }
 
+  const { content, createdAt } = props
+  const [fontSize, setFontSize] = useState(16)
+
+  useEffect(() => {
+    const paragraph = paragraphRef.current
+    const container = CardConainerDivRef.current
+    const createdAt = CreatedAtParagraphRef.current
+
+    const offsetContent = paragraph.clientHeight
+    const createdAtHeight = createdAt.clientHeight
+
+    const containerHeight = container.clientHeight - fontSize
+
+    if (offsetContent + createdAtHeight > containerHeight) {
+      setFontSize((prevSize) => prevSize - 2)
+    }
+  }, [content, fontSize])
+
   return (
     <div
       data-cy={`card-${props.id}`}
       className={styles.card}
       onClick={handleSetEditingOn}
+      ref={CardConainerDivRef}
     >
-      <p className={styles.date}>
+      <p ref={CreatedAtParagraphRef} className={styles.date}>
         {props.createdAt ? formatDate(props.createdAt) : 'Date'}
       </p>
+
       {!isEditing ? (
-        <p>{props?.content || 'Click to start noting'}</p>
+        <p ref={paragraphRef} style={{ fontSize: `${fontSize}px` }}>
+          {props?.content || 'Click to start noting'}
+        </p>
       ) : (
         <CardContentForm
           initialValues={props}
